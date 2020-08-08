@@ -89,7 +89,7 @@ def updateChannel(id):
         "video_description": video_description,
     }
     channelsDb.update(updates, id)
-    return 204
+    return jsonify({}), 204
 
 @app.route('/channels', methods=['GET'])
 def getChannels():
