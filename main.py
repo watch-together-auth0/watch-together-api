@@ -7,6 +7,7 @@ from dotenv import load_dotenv, find_dotenv
 from flask import Flask
 from flask import jsonify, request
 from flask import session
+from flask_cors import CORS, cross_origin
 from deta import Deta
 load_dotenv()
 
@@ -15,11 +16,15 @@ usersDb = deta.Base('users')
 channelsDb = deta.Base('channel')
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 app.secret_key = env['SECRET_KEY']
 
 
 @app.route('/users', methods=['GET'])
+@cross_origin()
 def getUsers():
     email = request.args.get('email')
     if email:
@@ -38,6 +43,7 @@ def get_user(id):
 
 
 @app.route('/users', methods=['POST'])
+@cross_origin()
 def createUser():
     name = request.json.get("name")
     email = request.json.get("email")
@@ -48,6 +54,7 @@ def createUser():
     return jsonify(user), 201
 
 @app.route('/channels', methods=['POST'])
+@cross_origin()
 def createChannel():
     name = request.json.get("name")
     ownerId = request.json.get("owner_id")
@@ -63,6 +70,7 @@ def createChannel():
     return jsonify(channel), 201
 
 @app.route('/channels/<id>/add', methods=['PATCH'])
+@cross_origin()
 def addMember(id):
     channel = channelsDb.get(id)
     print(channel['members'])
@@ -77,6 +85,7 @@ def addMember(id):
     return jsonify({}), 204
 
 @app.route('/channels/<id>', methods=['PATCH'])
+@cross_origin()
 def updateChannel(id):
     video_url = request.json.get("video_url")
     video_title = request.json.get("video_title")
@@ -92,6 +101,7 @@ def updateChannel(id):
     return jsonify({}), 204
 
 @app.route('/channels', methods=['GET'])
+@cross_origin()
 def getChannels():
     ownerId = request.args.get('ownerId')
     if ownerId:
