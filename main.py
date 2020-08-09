@@ -62,10 +62,7 @@ def createChannel():
         "name": name,
         "owner_id": ownerId,
         "members": [],
-        "video_url": "",
-        "video_title": "",
-        "video_thumb_url": "",
-        "video_description": ""
+        "video": {}
     })
     return jsonify(channel), 201
 
@@ -87,15 +84,9 @@ def addMember(id):
 @app.route('/channels/<id>', methods=['PATCH'])
 @cross_origin()
 def updateChannel(id):
-    video_url = request.json.get("video_url")
-    video_title = request.json.get("video_title")
-    video_thumb_url = request.json.get("video_thumb_url")
-    video_description = request.json.get("video_thumb_url")
+    video = request.json.get("video")
     updates = {
-        "video_url": video_url,
-        "video_title": video_title,
-        "video_thumb_url": video_thumb_url,
-        "video_description": video_description,
+        "video": video
     }
     channelsDb.update(updates, id)
     return jsonify({}), 204
