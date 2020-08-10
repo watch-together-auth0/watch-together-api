@@ -4,3 +4,4 @@ requests
 authlib
 six
 flask-cors
+numpy
